@@ -4,12 +4,13 @@
 
 SUMMARY = "U-Boot for Variscite's i.MX boards"
 require recipes-bsp/u-boot/u-boot.inc
-inherit pythonnative
 
 PROVIDES += "u-boot"
-DEPENDS_append = " python dtc-native"
+DEPENDS_append = " dtc-native"
 
 include u-boot-common.inc
+
+SRC_URI += "file://0001-Add-target-to-generate-initial-environment.patch"
 
 inherit fsl-u-boot-localversion
 
@@ -32,6 +33,7 @@ do_deploy_append_mx8m () {
                     for dtb in ${UBOOT_DTB_EXTRA}; do
                         install -m 0777 ${B}/${config}/arch/arm/dts/${dtb} ${DEPLOYDIR}/${BOOT_TOOLS}
                     done
+                    install -m 0777 ${B}/${config}/tools/mkimage  ${DEPLOYDIR}/${BOOT_TOOLS}/mkimage_uboot
                     install -m 0777 ${B}/${config}/u-boot-nodtb.bin  ${DEPLOYDIR}/${BOOT_TOOLS}/u-boot-nodtb.bin-${MACHINE}-${UBOOT_CONFIG}
                 fi
             done
